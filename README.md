@@ -7,6 +7,7 @@ sent over the network.
 **Live:** https://techshield-tech.github.io/bcrypt-generator/
 
 Part of [MMOALL Developer Tools](https://mmoall.com/tools).
+Also available at [mmoall.com/tools/bcrypt-generator](https://mmoall.com/tools/bcrypt-generator).
 
 ## Features
 
@@ -30,25 +31,24 @@ Part of [MMOALL Developer Tools](https://mmoall.com/tools).
 - [Vite 6](https://vite.dev/) + [React 19](https://react.dev/) + TypeScript
 - [Tailwind CSS 4](https://tailwindcss.com/) (via `@tailwindcss/vite`)
 - [Bun](https://bun.sh/) as package manager / script runner
-- No runtime dependencies besides React
+- [`@mmoall/tool-kit`](https://github.com/techshield-tech/tool-kit) for the shared shell, theme, embed, and SEO code
 
 ## Project structure
 
 ```
 src/
 ├── main.tsx              # Entry point
-├── index.css             # Tailwind + theme tokens (light/dark)
+├── index.css             # Tailwind import + tool-kit theme tokens
 ├── tool.config.ts        # Tool metadata: slug, name, description, category
-├── shell/                # Shared MMOALL tool shell (same across tool repos)
-│   ├── AppShell.tsx      # Header/footer, theme handling, embed mode
-│   ├── embed.ts          # iframe embed contract (postMessage)
-│   └── ui.tsx            # UI primitives and icons
-└── tool/                 # JSON-formatter–specific code
-    ├── Tool.tsx          # The tool UI
-    ├── json-transform.ts # formatJson / minifyJson / sort keys
-    ├── json-error.ts     # SyntaxError → line/column
-    └── sample.ts         # Sample JSON
+├── vite-env.d.ts         # Vite client type references
+└── tool/                 # Tool-specific code
+    └── Tool.tsx          # The tool UI
 ```
+
+The shared MMOALL tool shell (header/footer, theme handling, embed mode, UI
+primitives, SEO) is no longer local to this repo — it comes from the
+[`@mmoall/tool-kit`](https://github.com/techshield-tech/tool-kit) npm
+dependency instead.
 
 ## Running locally
 
@@ -82,7 +82,8 @@ With npm: `npm install`, `npm run dev`, `npm run build`, `npm run preview`.
 
 ### Base path
 
-The asset base URL is chosen at build time in `vite.config.ts`:
+The asset base URL is chosen at build time by the `mmoallTool` preset (from
+`@mmoall/tool-kit/vite`, called in `vite.config.ts`):
 
 | Condition               | `base`             | Used for                    |
 | ----------------------- | ------------------ | --------------------------- |
